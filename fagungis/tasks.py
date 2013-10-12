@@ -37,7 +37,6 @@ def setup():
     _install_dependencies()
     _create_django_user()
     _setup_directories()
-    _hg_clone()
     _install_virtualenv()
     _create_virtualenv()
     _install_gunicorn()
@@ -66,7 +65,6 @@ def deploy():
     puts(green_bg('Start deploy...'))
     start_time = datetime.now()
 
-    hg_pull()
     _install_requirements()
     _upload_nginx_conf()
     _upload_rungunicorn_script()
@@ -82,12 +80,6 @@ def deploy():
 
 
 @task
-def hg_pull():
-    with cd(env.code_root):
-        sudo('hg pull -u')
-
-
-@task
 def test_configuration(verbose=True):
     errors = []
     parameters_info = []
@@ -95,10 +87,6 @@ def test_configuration(verbose=True):
         errors.append('Project name missing')
     elif verbose:
         parameters_info.append(('Project name', env.project))
-    if 'repository' not in env or not env.repository:
-        errors.append('Repository url missing')
-    elif verbose:
-        parameters_info.append(('Repository url', env.repository))
     if 'hosts' not in env or not env.hosts:
         errors.append('Hosts configuration missing')
     elif verbose:
@@ -355,10 +343,6 @@ def virtenvrun(command):
 def virtenvsudo(command):
     activate = 'source %s/bin/activate' % env.virtenv
     sudo(activate + ' && ' + command)
-
-
-def _hg_clone():
-    sudo('hg clone %s %s' % (env.repository, env.code_root))
 
 
 def _test_nginx_conf():

@@ -9,13 +9,10 @@ from fagungis.tasks import *
 def example():
     #  name of your project - no spaces, no special chars
     env.project = 'example_production'
-    #  hg repository of your project
-    env.repository = 'https://bitbucket.org/DNX/example'
     #  hosts to deploy your project, users must be sudoers
     env.hosts = ['root@192.168.1.1', ]
     # additional packages to be installed on the server
     env.additional_packages = [
-        'mercurial',
     ]
     #  system user, owner of the processes and code on your server
     #  the user and it's home dir will be created if not present
