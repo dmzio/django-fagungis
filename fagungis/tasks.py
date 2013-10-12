@@ -267,9 +267,7 @@ def _verify_sudo():
 
 def _install_nginx():
     # add nginx stable ppa
-    sudo("add-apt-repository ppa:nginx/stable")
-    sudo("apt-get update")
-    sudo("apt-get -y install nginx")
+    sudo("add-apt -y install nginx")
     sudo("/etc/init.d/nginx start")
 
 
