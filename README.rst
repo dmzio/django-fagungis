@@ -76,11 +76,9 @@ Please pay attention to not have any tasks in your fabfile.py called:
 
 * deploy
 
-* test_configuration
-
 or
 
-* hg_pull
+* test_configuration
 
 because these names are reserved by Fagungis.
 
@@ -102,8 +100,6 @@ So, what we know about it?
 we know:
 
 * the project is called **projectus**
-
-* the hg repository is **https://bitbucket.org/DNX/projectus**
 
 * the ip of the server where you want to host it is: **88.88.88.88**
 
@@ -137,13 +133,6 @@ Now apply some changes to earlier cloned fabfile.py file in your project root:
     env.project = 'example_production'
     # to:
     env.project = 'projectus'
-
-* change repository::
-
-    # from:
-    env.repository = 'https://bitbucket.org/DNX/example'
-    # to:
-    env.repository = 'https://bitbucket.org/DNX/projectus'
 
 * change server ip::
 
