@@ -34,11 +34,8 @@ Using pip
 ---------
 If you have pip install available on your system, just type::
 
-    pip install django-fagungis
+    pip install git+git://github.com/pedesen/django-fagungis
 
-If you've already got an old version of Fagungis, and want to upgrade, use::
-
-    pip install -U django-fagungis
 
 Installing from a directory
 ---------------------------
@@ -67,7 +64,6 @@ have prepared for you an example file in **path/to/fagungis/example_fabfile.py**
 so you can create a copy of this file and modify it according to your
 needs.
 
-You can find also an online version of **example_fabfile.py** here: https://bitbucket.org/DNX/django-fagungis/src/tip/fagungis/example_fabfile.py
 
 Please pay attention to not have any tasks in your fabfile.py called:
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -76,11 +72,9 @@ Please pay attention to not have any tasks in your fabfile.py called:
 
 * deploy
 
-* test_configuration
-
 or
 
-* hg_pull
+* test_configuration
 
 because these names are reserved by Fagungis.
 
@@ -103,8 +97,6 @@ we know:
 
 * the project is called **projectus**
 
-* the hg repository is **https://bitbucket.org/DNX/projectus**
-
 * the ip of the server where you want to host it is: **88.88.88.88**
 
 * you want to use the domain **www.projectus.org** which point to 88.88.88.88
@@ -117,7 +109,7 @@ Clone example_fabfile.py::
 
 or::
 
-    wget -O fabfile.py https://bitbucket.org/DNX/django-fagungis/raw/tip/fagungis/example_fabfile.py
+    wget https://github.com/pedesen/django-fagungis/raw/master/fagungis/example_fabfile.py
 
 
 Now apply some changes to earlier cloned fabfile.py file in your project root:
@@ -137,13 +129,6 @@ Now apply some changes to earlier cloned fabfile.py file in your project root:
     env.project = 'example_production'
     # to:
     env.project = 'projectus'
-
-* change repository::
-
-    # from:
-    env.repository = 'https://bitbucket.org/DNX/example'
-    # to:
-    env.repository = 'https://bitbucket.org/DNX/projectus'
 
 * change server ip::
 
