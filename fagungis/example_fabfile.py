@@ -9,6 +9,8 @@ from fagungis.tasks import *
 def example():
     #  name of your project - no spaces, no special chars
     env.project = 'example_production'
+    #  git repository of your project
+    env.repository = 'https://github.com/pedesen/django-fagungis.git'
     #  hosts to deploy your project, users must be sudoers
     env.hosts = ['root@192.168.1.1', ]
     # additional packages to be installed on the server

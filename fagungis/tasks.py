@@ -37,6 +37,7 @@ def setup():
     _install_dependencies()
     _create_django_user()
     _setup_directories()
+    _git_clone()
     _install_virtualenv()
     _create_virtualenv()
     _install_gunicorn()
@@ -65,6 +66,7 @@ def deploy():
     puts(green_bg('Start deploy...'))
     start_time = datetime.now()
 
+    git_pull()
     _install_requirements()
     _upload_nginx_conf()
     _upload_rungunicorn_script()
@@ -77,6 +79,12 @@ def deploy():
     finish_message = '[%s] Correctly deployed in %i seconds' % \
     (green_bg(end_time.strftime('%H:%M:%S')), (end_time - start_time).seconds)
     puts(finish_message)
+
+
+@task
+def git_pull():
+    with cd(env.code_root):
+        sudo('git pull -u')
 
 
 @task
@@ -341,6 +349,10 @@ def virtenvrun(command):
 def virtenvsudo(command):
     activate = 'source %s/bin/activate' % env.virtenv
     sudo(activate + ' && ' + command)
+
+
+def _git_clone():
+    sudo('git clone %s %s' % (env.repository, env.code_root))
 
 
 def _test_nginx_conf():
