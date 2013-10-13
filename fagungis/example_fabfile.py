@@ -53,6 +53,12 @@ def example():
     env.requirements_file = join(env.code_root, 'requirements.txt')
     #  always ask user for confirmation when run any tasks
     env.ask_confirmation = True
+    # name of your database
+    # has to be the same as NAME in the DATABASES dict in your settings.py
+    env.postgresql_db_name = env.project
+    # name of the database user
+    # has to be the same as USER in the DATABASES dict in your settings.py
+    env.postgresql_username = env.django_user
 
     ### START gunicorn settings ###
     #  be sure to not have anything running on that port

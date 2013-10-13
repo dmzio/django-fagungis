@@ -42,5 +42,6 @@ setup(
     classifiers=CLASSIFIERS,
     install_requires=[
         'Fabric>=1.3',
+        'fabtools>=0.15.0'
     ],
 )

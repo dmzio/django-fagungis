@@ -3,12 +3,13 @@
 from copy import copy
 from datetime import datetime
 from os.path import basename, abspath, dirname, isfile, join
+from getpass import getpass
 from fabric.api import env, puts, abort, cd, hide, task
 from fabric.operations import sudo, settings, run
 from fabric.contrib import console
 from fabric.contrib.files import upload_template
-
 from fabric.colors import _wrap_with, green
+from fabtools import require
 
 green_bg = _wrap_with('42')
 red_bg = _wrap_with('41')
@@ -45,6 +46,8 @@ def setup():
     _upload_nginx_conf()
     _upload_rungunicorn_script()
     _upload_supervisord_conf()
+    _install_postgresql
+    _configure_postgresql
 
     end_time = datetime.now()
     finish_message = '[%s] Correctly finished in %i seconds' % \
@@ -95,6 +98,10 @@ def test_configuration(verbose=True):
         errors.append('Project name missing')
     elif verbose:
         parameters_info.append(('Project name', env.project))
+    if 'repository' not in env or not env.repository:
+        errors.append('Repository url missing')
+    elif verbose:
+        parameters_info.append(('Repository url', env.repository))
     if 'hosts' not in env or not env.hosts:
         errors.append('Hosts configuration missing')
     elif verbose:
@@ -234,6 +241,15 @@ def test_configuration(verbose=True):
     elif verbose:
         parameters_info.append(('supervisord_conf_file', env.supervisord_conf_file))
 
+    if 'postgresql_db_name' not in env or not env.postgresql_db_name:
+        errors.append('Database name missing')
+    elif verbose:
+        parameters_info.append(('Database name', env.postgresql_db_name))
+    if 'postgresql_username' not in env or not env.postgresql_username:
+        errors.append('Database username missing')
+    elif verbose:
+        parameters_info.append(('Database username', env.postgresql_username))
+
     if errors:
         if len(errors) == 29:
             ''' all configuration missing '''
@@ -273,8 +289,22 @@ def _verify_sudo():
     sudo('cd .')
 
 
+def _install_postgresql():
+    sudo("apt-get -y install postgresql")
+
+
+def _configure_postgresql():
+    db_pass = getpass("Please enter a password for the new database user '%s'"\
+        "(same as in your settings.py):\n" % env.postgresql_username)
+    puts("creating database user '%s'..." % env.postgresql_username)
+    with hide('running'):
+        require.postgres.user(env.postgresql_username, db_pass, superuser=True)
+    puts("creating database '%s'..." % env.postgresql_db_name)
+    require.postgres.database(env.postgresql_db_name,
+        owner=env.postgresql_username)
+
+
 def _install_nginx():
-    # add nginx stable ppa
     sudo("apt-get -y install nginx")
     sudo("/etc/init.d/nginx start")
 
