@@ -46,8 +46,9 @@ def setup():
     _upload_nginx_conf()
     _upload_rungunicorn_script()
     _upload_supervisord_conf()
-    _install_postgresql
-    _configure_postgresql
+    if env.dbengine == 'postgresql':
+        _install_postgresql
+        _configure_postgresql
 
     end_time = datetime.now()
     finish_message = '[%s] Correctly finished in %i seconds' % \
@@ -241,14 +242,15 @@ def test_configuration(verbose=True):
     elif verbose:
         parameters_info.append(('supervisord_conf_file', env.supervisord_conf_file))
 
-    if 'postgresql_db_name' not in env or not env.postgresql_db_name:
-        errors.append('Database name missing')
-    elif verbose:
-        parameters_info.append(('Database name', env.postgresql_db_name))
-    if 'postgresql_username' not in env or not env.postgresql_username:
-        errors.append('Database username missing')
-    elif verbose:
-        parameters_info.append(('Database username', env.postgresql_username))
+    if env.dbengine == 'postgresql':
+        if 'postgresql_db_name' not in env or not env.postgresql_db_name:
+            errors.append('Database name missing')
+        elif verbose:
+            parameters_info.append(('Database name', env.postgresql_db_name))
+        if 'postgresql_username' not in env or not env.postgresql_username:
+            errors.append('Database username missing')
+        elif verbose:
+            parameters_info.append(('Database username', env.postgresql_username))
 
     if errors:
         if len(errors) == 29:

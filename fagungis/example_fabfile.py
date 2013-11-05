@@ -54,6 +54,7 @@ def example():
     #  always ask user for confirmation when run any tasks
     env.ask_confirmation = True
     # name of your database
+    env.dbengine = 'sqlite'  # or 'postgresql'
     # has to be the same as NAME in the DATABASES dict in your settings.py
     env.postgresql_db_name = env.project
     # name of the database user
